@@ -1,0 +1,135 @@
+<div class="container-fluid col-sm-6 body_view">
+  
+  <!--Navbar For Designations-->
+  <nav class="navbar navbar-expand-lg bg-dark mb-3">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" [routerLink]="[]" (click)="showAll()">All</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" [routerLink]="[]" (click)="setTableData('Manager')">Manager</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" [routerLink]="[]" (click)="setTableData('Assistant Manager')">Assistant Manager</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" [routerLink]="[]" (click)="setTableData('Sales Manager')">Sales Manager</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" [routerLink]="[]" (click)="setTableData('Sales Consultant')">Sales Consultant</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!--Search Bar for table below -->
+  <div class="container mb-3">
+    <div class="row">
+      <div class="search-hero">
+        <input class="form-control" type="text" name="search" [(ngModel)]="searchText" autocomplete="off" placeholder=" Search ID, Name, Email or Designation">
+      </div>
+    </div>
+  </div>
+
+  <!--Table below to show apidata-->
+  <div id="table_display">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Designation</th>
+        </tr>
+      </thead>
+      <!--For All option in navbar-->
+      <tbody *ngIf="tableShow==1">
+        <tr *ngFor="let i of apidata | filter:searchText">
+          <th scope="row">{{i.id}}</th>
+          <td>{{i.Name}}</td>
+          <td>{{i.Email}}</td>
+          <td>{{i.Designation}}</td>
+        </tr>
+      </tbody>
+      <!--For other options in navbar-->
+      <tbody *ngIf="tableShow==0">
+        <tr *ngFor="let i of apidata | filter:searchText">
+          <th scope="row" *ngIf="i.Designation===tableData">{{i.id}}</th>
+          <td *ngIf="i.Designation===tableData">{{i.Name}}</td>
+          <td *ngIf="i.Designation===tableData">{{i.Email}}</td>
+          <td *ngIf="i.Designation===tableData">{{i.Designation}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!--Form is created to input data in table-->
+  <!--<div *ngIf="showForm==1" class="d-flex" id="form_display" #forms>
+    <form>
+      <h4 class="centre mt-3 mb-3"><b>Enter Your Data Here</b></h4>
+      <div class="mb-3">
+        ID : <input type="number" class="form-control" id="add_id" placeholder="Enter ID" #addId [value]="apidata.length+1" readonly >
+      </div>
+      <div class="mb-3">
+        Name : <input type="text" class="form-control" id="add_name" #addName placeholder="Enter Name"  required>
+      </div>
+      <div class="mb-3">
+        Email : <input type="email" class="form-control" id="add_email" #addEmail placeholder="Enter Email" required>
+      </div>
+      <div class="mb-3">
+        Designation : <input type="text" class="form-control" id="add_designation" #addDesignation placeholder="Enter Designation" required>
+      </div>
+      <div class="mb-3">
+        <input type="button" placeholder="Save" value="Save" class="form-control btn btn-primary" (click)="addData(addId.value,addName.value,addEmail.value,addDesignation.value)">
+      </div>
+    </form>
+  </div>-->
+
+  <!--Add button to enter data into table through form-->
+  <!--<div class="d-flex">
+    <button id="add_data" (click)="displayForm()">+</button>
+  </div>-->
+
+
+  <!-- Add Button to Trigger modal to enter data into table -->
+  <button type="button" id="add_data" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
+
+
+  <!-- Modal is created to Input Data to enter data into table-->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" id="modal_display">
+        <div class="modal-header">
+          <h3 class="centre mt-3 mb-3"><b>Enter Your Data Here</b></h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form><!--Form is created inside modal to input data in table-->
+            <div class="mb-3">
+              <b>ID : </b><input type="number" class="form-control" id="add_id" placeholder="Enter ID" #addId [value]="apidata.length+1" readonly >
+            </div>
+            <div class="mb-3">
+              <b>Name : </b><input type="text" class="form-control" id="add_name" #addName placeholder="Enter Name"  required>
+            </div>
+            <div class="mb-3">
+              <b>Email : </b><input type="email" class="form-control" id="add_email" #addEmail placeholder="Enter Email" required>
+            </div>
+            <div class="mb-3">
+              <b>Designation : </b><input type="text" class="form-control" id="add_designation" #addDesignation placeholder="Enter Designation" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="addData(addId.value,addName.value,addEmail.value,addDesignation.value)" data-bs-dismiss="modal">Save </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
